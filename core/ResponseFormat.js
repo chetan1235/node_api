@@ -1,5 +1,6 @@
 const ResponseFormat = {
     build : (object, message, statusCode, statusType, token)  => {
+        
         return {
             data: object,
             statusCode: statusCode,

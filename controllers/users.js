@@ -7,26 +7,22 @@ var config = require('../config/config');
 
 module.exports = {
     create(req, res) {
-
         return user
         .create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, 8)
+            password: req.body.password
         })
         .then(user => {
-           var token = jwt.sign({
-            exp: Math.floor(Date.now() / 1000) + (60 * 60),
-            data: 'foobar'}, 
-            'secret');
+           
           //s   newuser = Object.assign({ 'token' : 10, user});
             res.status(201).json(ResponseFormat.build(
             user,
             "User Create Successfully",
             201,
-            "success",
-            token
+            "success"
+            
         ))})
         .catch(error => res.status(400).json(ResponseFormat.error(
             error,
@@ -35,13 +31,27 @@ module.exports = {
         )))
     },
     login(req, res){
+
         return user.findOne({
             where:{
                 email : req.body.email,
-                password : bcrypt.hashSync(req.body.password, 8)
+                password : req.body.password
             }
-
-        })
+            }).then(user => {
+                res.status(201).json(ResponseFormat.build(
+                user,
+                "User Login Successfully",
+                201,
+                "success",
+                "token"
+                
+              ))
+            })     
+            .catch(error => res.status(400).json(ResponseFormat.error(
+            error,
+            "Something went wrong when create Users",
+            "error"
+        )))
 
     },
     list(req, res) {

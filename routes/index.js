@@ -5,6 +5,7 @@ const commentController = require('../controllers').comments
 
 module.exports = (app) => {
   app.post('/api/users', userController.create);
+  app.post('/api/login', userController.login);
   app.get('/api/users', userController.list);
   app.post('/api/comments/:userId/comment', commentController.create);
   app.get('/api/users/comments', userController.listWithComment);
